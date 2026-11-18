@@ -3,6 +3,7 @@
 namespace iutnc\deefy\dispatch;
 use iutnc\deefy\action\ListPlaylistsAction;
 use iutnc\deefy\action\ShowPlaylistAction;
+use iutnc\deefy\action\CurrentPlaylistAction;
 
 class Dispatcher
 {
@@ -25,6 +26,10 @@ class Dispatcher
             
             case 'show-playlist':
                 $action = new ShowPlaylistAction();
+                return $action->execute();
+            
+            case 'current-playlist':
+                $action = new CurrentPlaylistAction();
                 return $action->execute();
 
             default:
@@ -49,6 +54,7 @@ class Dispatcher
             <nav>
                 <a href="index.php?action=default">Accueil</a>
                 <a href="index.php?action=list-playlists">Mes playlists</a>
+                <a href="index.php?action=current-playlist">Playlist courante</a>
             </nav>
 
             <main>
