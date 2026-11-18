@@ -125,23 +125,61 @@ class DeefyRepository
     }
 
 
+    
     public function findPlaylistById(int $id): ?\iutnc\deefy\audio\lists\Playlist
     {
-    $query = "SELECT id, nom FROM playlist WHERE id = :id";
+        $query = "SELECT id, nom FROM playlist WHERE id = :id";
 
-    $stmt = $this->pdo->prepare($query);
-    $stmt->execute([
-        'id' => $id
-    ]);
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
 
-    $ligne = $stmt->fetch(PDO::FETCH_ASSOC);
+        $ligne = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($ligne === false) {
+        if ($ligne === false) {
         return null;
-    }
+        }
 
-    $playlist = new \iutnc\deefy\audio\lists\Playlist($ligne['nom']);
-    $playlist->setID((int) $ligne['id']);
+        $playlist = new \iutnc\deefy\audio\lists\Playlist($ligne['nom']);
+        $playlist->setID((int) $ligne['id']);
+
+        $query = "SELECT track.*
+              FROM track
+              INNER JOIN playlist2track
+                  ON track.id = playlist2track.id_track
+              WHERE playlist2track.id_pl = :id
+              ORDER BY playlist2track.no_piste_dans_liste";
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+
+        while ($piste = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
+            if ($piste['type'] === 'P') {
+                $track = new \iutnc\deefy\audio\tracks\PodcastTrack(
+                $piste['titre'],
+                $piste['filename']
+            );
+
+            $track->setAuteur($piste['auteur_podcast'] ?? '');
+            $track->setDate($piste['date_posdcast'] ?? '');
+
+        } else {
+            $track = new \iutnc\deefy\audio\tracks\AlbumTrack(
+                $piste['titre'],
+                $piste['filename'],
+                $piste['titre_album'] ?? '',
+                (int) $piste['numero_album']
+            );
+
+            $track->setArtiste($piste['artiste_album'] ?? '');
+            $track->setAnnee((int) $piste['annee_album']);
+        }
+
+        $track->setGenre($piste['genre'] ?? '');
+        $track->setDuree((int) $piste['duree']);
+
+        $playlist->ajouterPiste($track);
+    }
 
     return $playlist;
     }

@@ -2,6 +2,7 @@
 
 namespace iutnc\deefy\dispatch;
 use iutnc\deefy\action\ListPlaylistsAction;
+use iutnc\deefy\action\ShowPlaylistAction;
 
 class Dispatcher
 {
@@ -20,6 +21,10 @@ class Dispatcher
             
             case 'list-playlists':
                 $action = new ListPlaylistsAction();
+                return $action->execute();
+            
+            case 'show-playlist':
+                $action = new ShowPlaylistAction();
                 return $action->execute();
 
             default:
