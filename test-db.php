@@ -9,7 +9,13 @@ try {
 
     $repo = DeefyRepository::getInstance();
 
-    echo "Connexion à la base de données réussie !";
+    
+    $playlists = $repo->findAllPlaylists();
+
+    foreach ($playlists as $playlist) {
+    echo $playlist->id . " - " . $playlist->nom . "\n";
+}
+
 
 } catch (PDOException $e) {
     echo "Erreur de connexion : " . $e->getMessage();

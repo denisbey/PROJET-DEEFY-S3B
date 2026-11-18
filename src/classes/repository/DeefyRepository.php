@@ -42,4 +42,24 @@ class DeefyRepository
 
         return self::$instance;
     }
+
+
+    public function findAllPlaylists(): array
+    {
+    $query = "SELECT id, nom FROM playlist";
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute();
+
+    $playlists = [];
+
+    while ($ligne = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $playlist = new \iutnc\deefy\audio\lists\Playlist($ligne['nom']);
+        $playlist->setID((int) $ligne['id']);
+
+        $playlists[] = $playlist;
+    }
+
+    return $playlists;
+    }   
+
 }
