@@ -41,13 +41,17 @@ class Dispatcher
     {
         $contenu = $this->run();
 
+    
         echo <<<HTML
         <!DOCTYPE html>
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
             <title>Deefy</title>
+            <link rel="stylesheet" href="style.css">
         </head>
+
+
         <body>
             <h1>Deefy</h1>
 
