@@ -3,6 +3,7 @@
 namespace iutnc\deefy\dispatch;
 
 use iutnc\deefy\action\CreatePlaylistAction;
+use iutnc\deefy\action\AddTrackAction;
 
 class Dispatcher
 {
@@ -22,6 +23,10 @@ class Dispatcher
             case 'create-playlist':
                 $action = new CreatePlaylistAction();
                 return $action->execute();    
+
+            case 'add-track':
+                $action = new AddTrackAction();
+                return $action->execute();
 
             default:
                 return "<p>Action inconnue</p>";
@@ -45,6 +50,7 @@ class Dispatcher
             <nav>
                 <a href="index.php?action=default">Accueil</a>
                 <a href="index.php?action=create-playlist">Créer une playlist</a>
+                <a href="index.php?action=add-track">Ajouter un podcast</a>
             </nav>
 
             <main>
