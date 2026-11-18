@@ -1,6 +1,7 @@
 <?php
 
 namespace iutnc\deefy\dispatch;
+use iutnc\deefy\action\ListPlaylistsAction;
 
 class Dispatcher
 {
@@ -16,6 +17,10 @@ class Dispatcher
         switch ($this->action) {
             case 'default':
                 return "<h2>Bienvenue sur Deefy !</h2>";
+            
+            case 'list-playlists':
+                $action = new ListPlaylistsAction();
+                return $action->execute();
 
             default:
                 return "<p>Action inconnue</p>";
@@ -38,6 +43,7 @@ class Dispatcher
 
             <nav>
                 <a href="index.php?action=default">Accueil</a>
+                <a href="index.php?action=list-playlists">Mes playlists</a>
             </nav>
 
             <main>

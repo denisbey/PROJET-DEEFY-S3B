@@ -123,4 +123,26 @@ class DeefyRepository
         'numero' => $numero
     ]);
     }
+
+
+    public function findPlaylistById(int $id): ?\iutnc\deefy\audio\lists\Playlist
+    {
+    $query = "SELECT id, nom FROM playlist WHERE id = :id";
+
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute([
+        'id' => $id
+    ]);
+
+    $ligne = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($ligne === false) {
+        return null;
+    }
+
+    $playlist = new \iutnc\deefy\audio\lists\Playlist($ligne['nom']);
+    $playlist->setID((int) $ligne['id']);
+
+    return $playlist;
+    }
 }
